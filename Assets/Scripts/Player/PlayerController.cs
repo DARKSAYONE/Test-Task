@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private Camera playerCamera;
     private CharacterController characterController;
     private float camRotation = 0f;
+    private Vector3 velocity;
     private void Awake()
     {
         playerCamera = GetComponentInChildren<Camera>();
@@ -37,6 +38,12 @@ public class PlayerController : MonoBehaviour
         movement = transform.TransformDirection(movement);
         Vector3 moveDirection = movement * walkSpeed;
         characterController.Move(moveDirection * Time.deltaTime);
+
+        if (!characterController.isGrounded)
+        {
+            velocity.y -= 9.8f * 2.0f * Time.deltaTime;
+        }
+        characterController.Move(velocity * Time.deltaTime);
     }
 
     private void CameraMove()

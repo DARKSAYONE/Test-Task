@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class DragAndDrop : MonoBehaviour
 {
     [SerializeField] private Transform originPoint;
+    [SerializeField] private TextMeshProUGUI pressButtonText;
 
     private Camera playerCamera;
     private GameObject draggedObject;
     private Rigidbody draggedObjectRigidbody;
+
 
     private void Awake()
     {
@@ -35,12 +38,14 @@ public class DragAndDrop : MonoBehaviour
             {
                 if (hit.collider.CompareTag("Interacted"))
                 {
+                    pressButtonText.text = "Press E to pickup item";
                     if (Input.GetKeyDown(KeyCode.E))
                     {
                         PickUpObject(hit.collider.gameObject);
                         Debug.Log("PickUp obj");
                     }
                 }
+                pressButtonText.text = " ";
             }
         }
     }
@@ -53,7 +58,7 @@ public class DragAndDrop : MonoBehaviour
         if (draggedObjectRigidbody != null)
         {
             draggedObjectRigidbody.useGravity = false;
-            //draggedObjectRigidbody.isKinematic = true;
+            draggedObjectRigidbody.isKinematic = true;
         }
         draggedObj.transform.position = originPoint.position;
         draggedObj.transform.SetParent(originPoint);
@@ -64,7 +69,7 @@ public class DragAndDrop : MonoBehaviour
         if (draggedObjectRigidbody != null)
         {
             draggedObjectRigidbody.useGravity = true;
-            //draggedObjectRigidbody.isKinematic = false;
+            draggedObjectRigidbody.isKinematic = false;
         }
         draggedObject.transform.SetParent(null);
         draggedObject = null;
