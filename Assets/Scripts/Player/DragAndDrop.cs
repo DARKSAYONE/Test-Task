@@ -53,7 +53,7 @@ public class DragAndDrop : MonoBehaviour
         if (draggedObjectRigidbody != null)
         {
             draggedObjectRigidbody.useGravity = false;
-            draggedObjectRigidbody.isKinematic = true;
+            //draggedObjectRigidbody.isKinematic = true;
         }
         draggedObj.transform.position = originPoint.position;
         draggedObj.transform.SetParent(originPoint);
@@ -64,7 +64,7 @@ public class DragAndDrop : MonoBehaviour
         if (draggedObjectRigidbody != null)
         {
             draggedObjectRigidbody.useGravity = true;
-            draggedObjectRigidbody.isKinematic = false;
+            //draggedObjectRigidbody.isKinematic = false;
         }
         draggedObject.transform.SetParent(null);
         draggedObject = null;
