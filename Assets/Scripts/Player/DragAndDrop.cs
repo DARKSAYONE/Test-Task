@@ -11,22 +11,21 @@ public class DragAndDrop : MonoBehaviour
     private Camera playerCamera;
     private GameObject draggedObject;
     private Rigidbody draggedObjectRigidbody;
-
+    private bool canInteract = true;
 
     private void Awake()
     {
         playerCamera = GetComponentInChildren<Camera>();
         if (playerCamera == null) Debug.LogError("Player camera not found");
     }
+
     private void Update()
     {
-
-        if (draggedObject != null && Input.GetKeyDown(KeyCode.E))
+        if (draggedObject != null && Input.GetKeyDown(KeyCode.E) && canInteract)
         {
-            DropObject();
+            StartCoroutine(DropObjectWithDelay());
             Debug.Log("Drop Obj");
         }
-
 
         if (draggedObject == null)
         {
@@ -39,22 +38,38 @@ public class DragAndDrop : MonoBehaviour
                 if (hit.collider.CompareTag("Interacted"))
                 {
                     pressButtonText.text = "Press E to pickup item";
-                    if (Input.GetKeyDown(KeyCode.E))
+                    if (Input.GetKeyDown(KeyCode.E) && canInteract)
                     {
-                        PickUpObject(hit.collider.gameObject);
+                        StartCoroutine(PickUpObjectWithDelay(hit.collider.gameObject));
                         Debug.Log("PickUp obj");
                     }
+                    return;
                 }
-                pressButtonText.text = " ";
             }
+            pressButtonText.text = " ";
         }
+    }
+
+    private IEnumerator PickUpObjectWithDelay(GameObject draggedObj)
+    {
+        canInteract = false;
+        PickUpObject(draggedObj);
+        yield return new WaitForSeconds(0.5f);
+        canInteract = true;
+    }
+
+    private IEnumerator DropObjectWithDelay()
+    {
+        canInteract = false;
+        DropObject();
+        yield return new WaitForSeconds(0.5f);
+        canInteract = true;
     }
 
     private void PickUpObject(GameObject draggedObj)
     {
         draggedObject = draggedObj;
         draggedObjectRigidbody = draggedObject.GetComponent<Rigidbody>();
-
         if (draggedObjectRigidbody != null)
         {
             draggedObjectRigidbody.useGravity = false;
@@ -75,5 +90,4 @@ public class DragAndDrop : MonoBehaviour
         draggedObject = null;
         draggedObjectRigidbody = null;
     }
-
 }
